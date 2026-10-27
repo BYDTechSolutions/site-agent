@@ -1,0 +1,74 @@
+{
+  "name": "@bydtech/site-agent",
+  "version": "0.1.0",
+  "description": "An in-page agent for your website: visitors ask in plain words and it calls only the WebMCP tools your site declared, asks before anything that changes data, keeps the API key off the browser, and records every run so it can be replayed without the model. One custom element, zero dependencies.",
+  "keywords": [
+    "webmcp",
+    "agent",
+    "ai-agent",
+    "chatbot",
+    "web-component",
+    "custom-element",
+    "prompt-api",
+    "built-in-ai",
+    "tool-calling",
+    "model-context",
+    "llm",
+    "proxy"
+  ],
+  "homepage": "https://github.com/BYDTechSolutions/site-agent#readme",
+  "bugs": {
+    "url": "https://github.com/BYDTechSolutions/site-agent/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BYDTechSolutions/site-agent.git"
+  },
+  "license": "MIT",
+  "author": "BYD Tech <sales.bydtech@gmail.com> (https://bydtech.in)",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./element": {
+      "types": "./dist/element.d.ts",
+      "import": "./dist/element.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "./dist/element.js"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "size": "node scripts/size.mjs",
+    "demo": "npm run build && node examples/serve.mjs",
+    "prepack": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "jsdom": "^26.1.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.12"
+  }
+}
