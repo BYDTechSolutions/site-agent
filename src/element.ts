@@ -122,6 +122,7 @@ export class SiteAgentElement extends Base {
     stop: HTMLButtonElement;
   };
   #checkedAvailability = false;
+  #stale = false;
   /** The trace of the last finished run. */
   lastTrace: Trace | undefined;
 
@@ -273,11 +274,18 @@ export class SiteAgentElement extends Base {
     } finally {
       this.#run = undefined;
       this.#busy(false);
+      if (this.#stale) {
+        this.#stale = false;
+        this.#invalidate();
+      }
     }
   }
 
   #invalidate(): void {
-    if (this.#run) return; // takes effect after the current run
+    if (this.#run) {
+      this.#stale = true; // applied when the current run ends
+      return;
+    }
     this.#agent = undefined;
     this.#checkedAvailability = false;
   }

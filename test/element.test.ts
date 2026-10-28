@@ -170,3 +170,20 @@ describe('<site-agent>', () => {
     await vi.waitFor(() => expect($(node, '.status').textContent).toContain('ready'));
   });
 });
+
+describe('<site-agent> options during a run', () => {
+  it('applies new options after the current run ends', async () => {
+    const node = mount();
+    let release!: () => void;
+    const first = custom(() => new Promise((resolve) => (release = () => resolve({ type: 'answer', text: 'first' }))), { name: 'first' });
+    node.options = { model: first, tools: [] };
+    const done = node.ask('one');
+    await vi.waitFor(() => expect(release).toBeTypeOf('function'));
+    node.configure({ model: scriptedModel([{ type: 'answer', text: 'second' }]) });
+    expect(node.agent.model.name).toBe('first');
+    release();
+    await done;
+    expect(node.agent.model.name).toBe('test');
+    expect((await node.ask('two'))?.answer).toBe('second');
+  });
+});
