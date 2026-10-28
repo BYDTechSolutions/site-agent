@@ -93,13 +93,13 @@ describe('confirmation rules', () => {
     expect(verdictFor(tool, new Set(['t']), { tainted: false })).toEqual({ ask: true, reason: 'consequential' });
   });
 
-  it('after untrusted output, the next non-read-only call asks even if pre-approved', async () => {
+  it('after untrusted output, every non-read-only call asks even if pre-approved, also after an allow', async () => {
     const { asked, log } = await runWith(
       [call('read_reviews', { productId: 'm1' }), call('search_products', { query: 'q' }), cartCall, cartCall, answer('ok')],
       { confirm: () => true, preApproved: ['add_to_cart'] },
     );
-    // reviews (read-only, untrusted) → search (read-only, no ask) → cart asks once → cart pre-approved again
-    expect(asked.map((a) => a.reason)).toEqual(['after-untrusted']);
+    // reviews (read-only, untrusted) → search (read-only, no ask) → cart asks → cart asks again: the reviews are still in context
+    expect(asked.map((a) => a.reason)).toEqual(['after-untrusted', 'after-untrusted']);
     expect(log.calls.map((c) => c.name)).toEqual(['read_reviews', 'search_products', 'add_to_cart', 'add_to_cart']);
   });
 

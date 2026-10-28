@@ -99,9 +99,9 @@ These are enforced in code and covered by tests.
 4. **No `confirm`, no action.** Without a `confirm` function, every call that needs asking is denied. Nothing is ever allowed by default.
 5. **`preApproved` names skip asking,** with three exceptions that always ask:
    - tools marked `consequentialHint` (this cannot be disabled);
-   - the next non-read-only call after a tool marked `untrustedContentHint` returned, until the visitor allows a call;
+   - every non-read-only call after a tool marked `untrustedContentHint` returned, for the rest of the conversation (that content stays in the model's context; `reset()` starts over);
    - tools for which the browser returned no `annotations` at all, since the agent cannot tell what they do.
-6. **Untrusted output is data.** Results of `untrustedContentHint` tools reach the model inside `<untrusted-data tool="...">…</untrusted-data>`, with any copy of that tag inside the content escaped, and the system instructions say such blocks are data, never instructions. This lowers the risk of prompt injection; it does not remove it, which is why rule 5 adds a fresh confirmation after such output.
+6. **Untrusted output is data.** Results of `untrustedContentHint` tools reach the model inside `<untrusted-data tool="...">…</untrusted-data>`, with any copy of that tag inside the content escaped, and the system instructions say such blocks are data, never instructions. This lowers the risk of prompt injection; it does not remove it, which is why rule 5 asks before every call that changes something once such output is in the conversation.
 7. **Bounded.** One tool call at a time, `maxSteps` model turns per message (default 6), a per-call timeout (default 30 s), results cut to 4000 characters, and an abort that stops the model call, the pending confirmation and the running tool.
 
 Declarative form tools (`<form toolname>`) keep the browser's own rule on top of these: the browser fills the form and the visitor still clicks Submit, unless the form has `toolautosubmit`.
@@ -298,7 +298,7 @@ The launcher and the panel are exposed as `::part(launcher)` and `::part(panel)`
 - **Declarative form tools** appear only where the browser has WebMCP. How `executeTool` reports a form the visitor has not yet submitted is up to the browser; the agent passes on whatever comes back.
 - **Small models route; they do not plan.** Chrome's on-device model is a reasonable fit for picking one tool and its arguments, not for long chains of steps. Tool-choice accuracy has not been measured for any model; this README makes no accuracy claims.
 - **Argument checks are small on purpose:** `type`, `required`, `properties`, `additionalProperties: false`, `enum`, `const` and `items`, recursively. Your tool should still validate its own input.
-- **Untrusted fencing reduces prompt-injection risk; it does not remove it.** The fresh confirmation after untrusted output is the backstop.
+- **Untrusted fencing reduces prompt-injection risk; it does not remove it.** Asking before every call that changes something, once such output is in the conversation, is the backstop.
 - **No DOM fallback, by design.** If a task has no declared tool, the agent says so instead of trying to click its way through the page.
 - **The server's protections limit cost and abuse.** They do not authenticate anyone (see [Server helper](#server-helper)).
 - **Gemini thought signatures:** the server passes a function call's `thoughtSignature` back to the browser in `meta` and returns it with the next request, as Gemini's newer models expect. This mapping is tested against recorded shapes, not against the live API.

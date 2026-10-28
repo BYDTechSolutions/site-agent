@@ -4,7 +4,10 @@ import type { AgentTool, ConfirmFn, ConfirmReason, ConfirmRequest, Decision, Too
 
 /** Confirmation state that lives across the steps and runs of one conversation. */
 export interface PolicyState {
-  /** Set after a tool marked `untrustedContentHint` returns; cleared when the visitor allows a call. */
+  /**
+   * Set after a tool marked `untrustedContentHint` returns. It stays set for the rest of the
+   * conversation, because that content stays in the model's context; only `reset()` clears it.
+   */
   tainted: boolean;
 }
 
@@ -15,7 +18,7 @@ export type Verdict = { ask: false; by: 'read-only' | 'pre-approved' } | { ask: 
  * 1. A tool without annotations from the browser always asks (pre-approval does not apply).
  * 2. `consequentialHint` always asks, even when read-only or pre-approved.
  * 3. `readOnlyHint` runs without asking.
- * 4. After untrusted output, the next non-read-only call asks, even when pre-approved.
+ * 4. After untrusted output, every non-read-only call asks, even when pre-approved, until `reset()`.
  * 5. Pre-approved names run without asking.
  * 6. Everything else asks.
  */
@@ -54,6 +57,5 @@ export async function decide(
   options.onRequest?.(request);
   const answer = await raceAbort(options.confirm(request, { signal: options.signal }), options.signal);
   const allowed = answer === true;
-  if (allowed) options.state.tainted = false;
   return { allowed, by: 'visitor', reason: verdict.reason };
 }
