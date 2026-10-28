@@ -33,8 +33,8 @@ Register a tool and add the element. In browsers without WebMCP, importing the e
 <site-agent label="Ask this site"></site-agent>
 
 <script type="module">
-  import { installShim } from 'https://cdn.jsdelivr.net/npm/@bydtech/site-agent@0.1.0/dist/index.js';
-  import 'https://cdn.jsdelivr.net/npm/@bydtech/site-agent@0.1.0/dist/element.js';
+  import { installShim } from 'https://cdn.jsdelivr.net/npm/@bydtech/site-agent@0.1.1/dist/index.js';
+  import 'https://cdn.jsdelivr.net/npm/@bydtech/site-agent@0.1.1/dist/element.js';
 
   // The browser's own document.modelContext when it has one, the local shim otherwise.
   const modelContext = installShim();

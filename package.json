@@ -1,6 +1,6 @@
 {
   "name": "@bydtech/site-agent",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An in-page agent for your website: visitors ask in plain words and it calls only the WebMCP tools your site declared, asks before anything that changes data, keeps the API key off the browser, and records every run so it can be replayed without the model. One custom element, zero dependencies.",
   "keywords": [
     "webmcp",
