@@ -318,11 +318,10 @@ export class SiteAgentElement extends Base {
   #onEvent(event: AgentEvent): void {
     this.dispatchEvent(new CustomEvent('site-agent-event', { detail: event, bubbles: true, composed: true }));
     switch (event.type) {
-      case 'tool-call':
-        this.#append('event', `Using ${event.call.name}…`);
-        break;
       case 'confirm-result':
-        if (!event.decision.allowed && event.decision.by === 'no-confirm') {
+        // Shown after the decision: confirmation cards are added while the run waits, before this event is read.
+        if (event.decision.allowed) this.#append('event', `Using ${event.call.name}…`);
+        else if (event.decision.by === 'no-confirm') {
           this.#append('event', `${event.call.name} needs your permission, and this page cannot ask, so it was not run.`);
         }
         break;

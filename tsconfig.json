@@ -13,7 +13,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "@bydtech/site-agent": ["./src/index.ts"],
+      "@bydtech/site-agent/server": ["./src/server.ts"],
+      "@bydtech/site-agent/element": ["./src/element.ts"]
+    }
   },
   "include": ["src", "test", "examples/*.ts", "tsup.config.ts", "vitest.config.ts"]
 }
