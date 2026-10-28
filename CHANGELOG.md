@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - unreleased
+## [0.1.0] - 2026-10-28
 
 ### Added
 
@@ -22,5 +22,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Examples: a demo shop (`npm run demo`), proxies for Node and Cloudflare Workers.
 - Zero runtime dependencies; a size check keeps the browser bundle under 30 kB gzipped.
 
-[Unreleased]: https://github.com/BYDTechSolutions/site-agent/commits/main
-[0.1.0]: https://github.com/BYDTechSolutions/site-agent/commits/main
+[Unreleased]: https://github.com/BYDTechSolutions/site-agent/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/BYDTechSolutions/site-agent/releases/tag/v0.1.0
