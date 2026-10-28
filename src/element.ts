@@ -53,7 +53,7 @@ h2{font-size:15px;margin:0}
 .confirm{border:1px solid var(--site-agent-border);border-radius:var(--site-agent-radius);padding:12px;background:var(--site-agent-surface)}
 .confirm h3{font-size:14px;margin:0 0 6px}
 .confirm p{margin:0 0 6px}
-.confirm .why{color:var(--site-agent-muted);font-size:13px}
+.confirm .why,.confirm .empty{color:var(--site-agent-muted);font-size:13px}
 .confirm dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:6px 0 10px;font-size:14px}
 .confirm dt{color:var(--site-agent-muted)}
 .confirm dd{margin:0;overflow-wrap:anywhere}
@@ -362,7 +362,7 @@ export class SiteAgentElement extends Base {
       for (const line of request.lines) dl.append(el('dt', undefined, line.label), el('dd', undefined, line.value));
       card.append(dl);
     } else {
-      card.append(el('p', 'why', 'No details.'));
+      card.append(el('p', 'empty', 'No details to show.'));
     }
     const allow = el('button', 'primary', 'Allow');
     const deny = el('button', undefined, 'Deny');

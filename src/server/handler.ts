@@ -196,10 +196,18 @@ export function parseProxyRequest(
 export function nameMap(tools: ModelTool[]): { out: (name: string) => string; back: (name: string) => string } {
   const toProvider = new Map<string, string>();
   const fromProvider = new Map<string, string>();
+  // Valid names keep their spelling; the others get a free spelling after them.
   for (const tool of tools) {
-    let safe = NAME.test(tool.name) ? tool.name : tool.name.replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 60) || 'tool';
-    let n = 2;
-    while (fromProvider.has(safe) && fromProvider.get(safe) !== tool.name) safe = `${safe.slice(0, 60)}_${n++}`;
+    if (NAME.test(tool.name)) {
+      toProvider.set(tool.name, tool.name);
+      fromProvider.set(tool.name, tool.name);
+    }
+  }
+  for (const tool of tools) {
+    if (toProvider.has(tool.name)) continue;
+    const base = tool.name.replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 60) || 'tool';
+    let safe = base;
+    for (let n = 2; fromProvider.has(safe); n++) safe = `${base}_${n}`;
     toProvider.set(tool.name, safe);
     fromProvider.set(safe, tool.name);
   }
